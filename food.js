@@ -3,9 +3,10 @@ import { onSnake2, expandSnake2, updateSnake2Score } from './snakes/snake2.js'
 import { onSnake3, expandSnake3, updateSnake3Score } from './snakes/snake3.js'
 import { randomGridPosition } from './grid.js'
 
-export let SNAKE_SPEED = 7;
-let EXPANSION_RATE = 5;
-let food = getRandomFoodPosition();
+export let SNAKE_SPEED = 7; // This sets the original speed of the game. The speed increases as the snake eats food (see "increaseSpeed" function).
+let EXPANSION_RATE = 5;     // This sets the original expansion rate of the snake. The expansion rate increases as the snake eats food (see "increaseGrowth" function).
+
+let food = getRandomFoodPosition(); // This sets the original position of the food.
 
 export function increaseSpeed () {
   SNAKE_SPEED += 0.2;
@@ -15,6 +16,11 @@ function increaseGrowth () {
   EXPANSION_RATE += 2;
 }
 
+/*
+  This function is used to check if the food has been eaten by the snake. 
+  If the snake has eaten the food, the snake's body will expand and the food will be repositioned.
+  The speed of the game will also increase as well as the expansion rate (for all snakes).
+*/
 export function updateFood () {
   if (onSnake1(food)) {
     expandSnake1(EXPANSION_RATE);
@@ -47,6 +53,7 @@ export function spawnFood (gameBoard) {
 
 function getRandomFoodPosition () {
   let newFoodPosition;
+  // a "while" loop is used to reposition the food if it is placed on the snake's body.
   while (newFoodPosition == null || onSnake1(newFoodPosition) || onSnake2(newFoodPosition)) {
     newFoodPosition = randomGridPosition();
   }
