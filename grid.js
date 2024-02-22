@@ -1,19 +1,28 @@
-/* 
-  Purpose: This file contains the grid size and the randomGridPosition function that is used to generate a random position. 
-  It also contains the "outsideGrid" function that checks if the snake is outside the grid (or hit a wall).
-*/
-const GRID_SIZE = 22;
-
-export function randomGridPosition () {
-  return { 
-    x: Math.floor(Math.random() * GRID_SIZE) +1,
-    y: Math.floor(Math.random() * GRID_SIZE) +1
+export default class Grid {
+  constructor(gridSize = 22) {
+    document.getElementById("grid").innerHTML = "";
+    this.occupiedSquares = [];
+    this.gridSize = gridSize;
   }
-}
 
-export function outsideGrid (position) {
-  return (
-    position.x > GRID_SIZE || position.x < 1 || 
-    position.y > GRID_SIZE || position.y < 1
-  )
+  getRandomFoodPosition() {
+    const newFoodPosition = this.randomGridPosition();
+    return newFoodPosition;
+  }
+
+  randomGridPosition() {
+    return {
+      x: Math.floor(Math.random() * this.gridSize) + 1,
+      y: Math.floor(Math.random() * this.gridSize) + 1,
+    };
+  }
+
+  outsideGrid(position) {
+    return (
+      position.x > this.gridSize ||
+      position.x < 1 ||
+      position.y > this.gridSize ||
+      position.y < 1
+    );
+  }
 }
