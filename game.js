@@ -1,20 +1,22 @@
 import Snake from "./snake.js";
 import Food from "./food.js";
 import Grid from "./grid.js";
+import ScoreBoard from "./scoreBoard.js";
 
 export default class Game {
   constructor(gridSize = 22) {
     this.snakes = [];
     this.grid = new Grid(gridSize);
     this.gameGoing = true;
-    this.food;
+    this.food = new Food(3, 10, "red")
     this.expansionRate = 5;
     this.gameSpeed = 7;
     this.lastRenderTime = 0;
+    this.scoreBoard = new ScoreBoard();
   }
 
-  addSnake(name, spawnX, spawnY, up, down, left, right) {
-    const snake = new Snake(name, spawnX, spawnY, up, down, left, right);
+  addSnake(name, spawnSpot, directions, color) {
+    const snake = new Snake(name, spawnSpot, directions, color);
     this.snakes.push(snake);
     snake.draw();
   }
@@ -29,14 +31,13 @@ export default class Game {
     });
   }
 
-  draw() {
+  start() {
     document.getElementById("grid").innerHTML = "";
     this.snakes.forEach((snake) => {
       snake.draw();
       window.addEventListener("keydown", (e) => snake.updateDirection(e));
     });
-    const { x, y } = this.grid.getRandomFoodPosition();
-    this.food = new Food(x, y);
+    this.scoreBoard.draw(this.snakes);
     this.food.draw();
   }
 
@@ -45,9 +46,9 @@ export default class Game {
       this.snakes
         .filter((s) => s.name !== snake.name)
         .forEach((s) => {
-        const bodySansHead = [...s.body];
-        const head = bodySansHead.shift();
-        snake.checkDeath(bodySansHead, head, this.grid.gridSize);
+          const bodySansHead = [...s.body];
+          const head = bodySansHead.shift();
+          snake.checkDeath(bodySansHead, head, this.grid.gridSize);
         });
       snake.isAlive && snake.update();
     });
@@ -60,9 +61,9 @@ export default class Game {
     this.snakes.forEach((snake) => {
       if (snake.equalPosition(snake.head(), this.food.position)) {
         snake.expand(this.expansionRate);
-        snake.updateScore();
+        this.scoreBoard.update(snake);
         const { x, y } = this.grid.getRandomFoodPosition();
-        this.food = new Food(x, y);
+        this.food = new Food(x, y, "red");
         this.increaseGrowth();
         this.increaseSpeed();
       }

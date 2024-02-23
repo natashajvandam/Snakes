@@ -1,6 +1,6 @@
 export default class Snake {
-  constructor(name, spawnX, spawnY, up, down, left, right) {
-    this.body = [{ x: spawnX, y: spawnY }];
+  constructor(name, {x, y}, {up, down, left, right}, color) {
+    this.body = [{ x, y }];
     this.newSegments = 0;
     this.inputDirection = { x: 0, y: 0 };
     this.lastInputDirection = { x: 0, y: 0 };
@@ -11,6 +11,7 @@ export default class Snake {
     this.down = down;
     this.left = left;
     this.right = right;
+    this.color = color;
   }
 
   head() {
@@ -19,7 +20,7 @@ export default class Snake {
 
   update() {
     this.addSegments();
-    const direction = this.inputDirection;
+    const direction = this.getInputDirection();
     for (let i = this.body.length - 2; i >= 0; i--) {
       this.body[i + 1] = { ...this.body[i] };
     }
@@ -32,7 +33,8 @@ export default class Snake {
       const snakeElement = document.createElement("div");
       snakeElement.style.gridRowStart = seg.y;
       snakeElement.style.gridColumnStart = seg.x;
-      snakeElement.classList.add(`${this.name}_tail`);
+      snakeElement.style.backgroundColor = this.color;
+      snakeElement.classList.add('snake');
       document.getElementById("grid").appendChild(snakeElement);
     });
   }
@@ -116,29 +118,30 @@ export default class Snake {
           break;
         }
         this.inputDirection = { x: 0, y: -1 };
-        this.lastInputDirection = this.inputDirection;
         break;
       case this.down:
         if (this.lastInputDirection.y !== 0) {
           break;
         }
         this.inputDirection = { x: 0, y: 1 };
-        this.lastInputDirection = this.inputDirection;
         break;
       case this.right:
         if (this.lastInputDirection.x !== 0) {
           break;
         }
         this.inputDirection = { x: 1, y: 0 };
-        this.lastInputDirection = this.inputDirection;
         break;
       case this.left:
         if (this.lastInputDirection.x !== 0) {
           break;
         }
         this.inputDirection = { x: -1, y: 0 };
-        this.lastInputDirection = this.inputDirection;
         break;
     }
+  }
+
+  getInputDirection() {
+    this.lastInputDirection = this.inputDirection;
+    return this.inputDirection;
   }
 }

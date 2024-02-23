@@ -3,18 +3,10 @@ import Game from "./game.js";
 let lastRenderTime = 0;
 const game = new Game();
 if (game.snakes?.length === 0) {
-  game.addSnake("snake1", 12, 12, "w", "s", "a", "d");
-  game.addSnake(
-    "snake2",
-    15,
-    15,
-    "ArrowUp",
-    "ArrowDown",
-    "ArrowLeft",
-    "ArrowRight"
-  );
-  game.addSnake("snake3", 18, 18, "i", "k", "j", "l");
-  game.draw();
+  game.addSnake("snake1", {x: 12, y: 12}, {up: "w", down: "s", left: "a", right: "d"}, "green");
+  game.addSnake("snake2", {x: 15, y: 15}, {up: "ArrowUp", down:"ArrowDown", left: "ArrowLeft", right: "ArrowRight"}, "blue");
+  game.addSnake("snake3", {x: 18, y: 18}, {up: "i", down: "k", left: "j",right: "l"}, "red");
+  game.start();
 }
 
 function main(currentTime) {
