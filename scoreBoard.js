@@ -1,6 +1,7 @@
 export default class ScoreBoard {
   constructor() {}
 
+  // This function is called once at game start:
   draw(snakes) {
     const scoreBoard = document.getElementById("scoreBoard");
     scoreBoard.innerHTML = "";
@@ -14,6 +15,7 @@ export default class ScoreBoard {
     });
   }
 
+  // This function is called every time a snake eats food:
   update(snake) {
     snake.score++;
     document.getElementById(

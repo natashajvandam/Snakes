@@ -15,22 +15,14 @@ export default class Game {
     this.scoreBoard = new ScoreBoard();
   }
 
+  // At game creation, this function is called for each snake:
   addSnake(name, spawnSpot, directions, color) {
     const snake = new Snake(name, spawnSpot, directions, color);
     this.snakes.push(snake);
     snake.draw();
   }
 
-  update() {
-    this.checkIfSnakesAteFood();
-    this.checkForDeaths();
-    document.getElementById("grid").innerHTML = "";
-    this.food.draw();
-    this.snakes.forEach((snake) => {
-      snake.isAlive && snake.draw();
-    });
-  }
-
+  // Once all snakes are added to the game, this function starts the game:
   start() {
     document.getElementById("grid").innerHTML = "";
     this.snakes.forEach((snake) => {
@@ -41,6 +33,15 @@ export default class Game {
     this.food.draw();
   }
 
+  // Update runs every frame after game starts:
+  update() {
+    this.checkIfSnakesAteFood();
+    document.getElementById("grid").innerHTML = ""; 
+    this.food.draw();
+    this.checkForDeaths();
+  }
+
+  // checkForDeaths & checkIfSnakesAteFood are helper functions for update:
   checkForDeaths() {
     this.snakes.forEach((snake) => {
       this.snakes
@@ -50,7 +51,10 @@ export default class Game {
           const head = bodySansHead.shift();
           snake.checkDeath(bodySansHead, head, this.grid.gridSize);
         });
-      snake.isAlive && snake.update();
+      if (snake.isAlive) {
+          snake.update();
+          snake.draw();
+        }
     });
     if (this.snakes.every((snake) => snake.isAlive === false)) {
       this.gameGoing = false;
@@ -74,6 +78,7 @@ export default class Game {
     });
   }
 
+  // increaseSpeed & increaseGrowth are functions that are called when a snake eats food:
   increaseSpeed() {
     this.gameSpeed += 0.2;
   }

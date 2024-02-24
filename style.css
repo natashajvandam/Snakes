@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap");
 
+/* This is the default style for the entire page */
 * {
   margin: 0;
   padding: 0;
@@ -21,10 +22,7 @@ body {
   font-family: "Arvo", serif;
 }
 
-.material-symbols-outlined {
-  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
-}
-
+/* All inputs will have these styles by default */
 input {
   border-style: none;
   border-radius: 8px;
@@ -33,35 +31,7 @@ input {
   font-size: 20px;
 }
 
-.setup {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 300px;
-  height: 300px;
-}
-
-#setup_title {
-  font-family: "Arvo", serif;
-  font-size: 30px;
-  margin: 10px;
-  color: rgb(72, 16, 169);
-}
-
-#step2 {
-  display: none;
-}
-
-#setup_grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  width: 60vmin;
-  height: 60vmin;
-  gap: 10px;
-}
-
+/* All buttons will have these styles by default: */
 button {
   font-family: "Arvo", serif;
   font-size: 20px;
@@ -76,22 +46,57 @@ button {
   color: rgb(72, 16, 169);
 }
 
-.setup_grid_button {
-  width: 30vmin;
-  height: 30vmin;
-}
-
 button:hover {
   background: rgb(72, 16, 169);
   color: rgb(212, 213, 113);
 }
 
+/* This is the full setup section */
+.setup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 300px;
+}
+
+/* "Snakes" title at the top */
+#setup_title {
+  font-family: "Arvo", serif;
+  font-size: 30px;
+  margin: 10px;
+  color: rgb(72, 16, 169);
+}
+
+/* "Snake name" title etc. */
 .setup_section_title {
   padding: 20px 0;
   width: 60vmin;
   color: rgb(22, 59, 10);
 }
 
+/* Start off only showing step1 (change step2 to display when step1 is complete) */
+#step2 {
+  display: none;
+}
+
+/* This is the grid of 4 buttons (1-4) for player count. */
+#setup_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  width: 60vmin;
+  height: 60vmin;
+  gap: 10px;
+}
+
+.setup_grid_button {
+  width: 30vmin;
+  height: 30vmin;
+}
+
+/* Describes the inputs up, down, left, right */
 #setup_control_grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -116,6 +121,7 @@ button:hover {
   width: 15vmin;
 }
 
+/* This is the section for "next" and "back" buttons */
 .setup_section_button {
   width: 60vmin;
   display: flex;
@@ -123,6 +129,17 @@ button:hover {
   justify-content: space-between;
 }
 
+#setup_next_button,
+#setup_back_button {
+  padding: 10px;
+}
+
+/* This is for the "next" and "back" icons: */
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* This is the section for the snake name and color. */
 .setup_section_name_color {
   display: flex;
   flex-direction: row;
@@ -130,6 +147,7 @@ button:hover {
   width: 60vmin;
 }
 
+/* This is the color square showing the snake color */
 #color_square {
   width: 30px;
   height: 30px;
@@ -138,32 +156,29 @@ button:hover {
   border-radius: 10px;
 }
 
-#setup_next_button,
-#setup_back_button {
-  padding: 10px;
-}
-
+/* This is the game grid: */
 #grid {
   background: white;
   width: 100vmin;
   height: 100vmin;
   margin: 10px;
   display: grid;
-  grid-template-columns: repeat(22, 1fr);
-  grid-template-rows: repeat(22, 1fr);
 }
 
+/* This is the food in the game: */
 .food {
   border: solid rgb(219, 218, 218) 3px;
   border-radius: 50%;
 }
 
+/* This is for the snakes in the game: */
 .snake {
   border-radius: 10%;
   display: flex;
   justify-content: center;
 }
 
+/* This is for the score board styles: */
 #scoreBoard {
   position: fixed;
   display: flex;

@@ -14,20 +14,37 @@ export default class Snake {
     this.color = color;
   }
 
+  // The head of the snake is the first element in the body array:
   head() {
     return this.body[0];
   }
 
+  /* 
+    For each body segment, move it to the position 
+    of the segment in front of it.
+  */
   update() {
     this.addSegments();
     const direction = this.getInputDirection();
     for (let i = this.body.length - 2; i >= 0; i--) {
       this.body[i + 1] = { ...this.body[i] };
     }
+    // After moving all the other segments, move the head:
     this.body[0].x += direction.x;
     this.body[0].y += direction.y;
   }
 
+  addSegments() {
+    for (let i = 0; i < this.newSegments; i++) {
+      this.body.push({ ...this.body[this.body.length - 1] });
+    }
+    this.newSegments = 0;
+  }
+
+  /* 
+    For each segment in the body array, create a div 
+    element and append it to the grid.
+  */
   draw() {
     this.body.forEach((seg) => {
       const snakeElement = document.createElement("div");
@@ -39,19 +56,25 @@ export default class Snake {
     });
   }
 
+  /*
+    Every time the snake eats food, the newSegments 
+    property is increased by the expansionRate. And 
+    the snake's score is updated:
+  */
+  updateScore() {
+    this.score++;
+    document.getElementById(`${this.name}_score`).innerHTML = `${this.score}`;
+  }
+
   expand(amount) {
     this.newSegments += amount;
   }
-
-  onSnake(position, ignoreHead = false) {
-    return this.body.some((seg, index) => {
-      if (ignoreHead && index === 0) {
-        return false;
-      }
-      return this.equalPosition(seg, position);
-    });
-  }
-
+  
+  /*
+    The checkDeath function is called every frame
+    to see if the snake has died. If it has, the
+    remove function is called.
+  */
   checkDeath(otherBody, otherHead, gridSize) {
     if (
       this.hitEdgeOfGrid(gridSize) ||
@@ -62,11 +85,6 @@ export default class Snake {
       this.remove();
       return true;
     }
-  }
-
-  updateScore() {
-    this.score++;
-    document.getElementById(`${this.name}_score`).innerHTML = `${this.score}`;
   }
 
   hitEdgeOfGrid(gridSize) {
@@ -90,6 +108,25 @@ export default class Snake {
     return this.body.length > 1 ? this.onSnake(head, true) : false;
   }
 
+  // Helper function to see if a position is on the snake:
+  onSnake(position, ignoreHead = false) {
+    return this.body.some((seg, index) => {
+      if (ignoreHead && index === 0) {
+        return false;
+      }
+      return this.equalPosition(seg, position);
+    });
+  }
+
+  equalPosition(pos1, pos2) {
+    return pos1.x === pos2.x && pos1.y === pos2.y ? true : false;
+  }
+
+  /* 
+    When snake dies, remove all the div elements
+    and set isAlive to false. Also remove the event
+    listener for the snake's controls.
+  */
   remove() {
     let snakeElements = document.getElementsByClassName(this.name);
     while (snakeElements.length > 0) {
@@ -98,17 +135,6 @@ export default class Snake {
     this.isAlive = false;
     this.body = [{}];
     window.removeEventListener("keydown", (e) => this.updateDirection(e));
-  }
-
-  addSegments() {
-    for (let i = 0; i < this.newSegments; i++) {
-      this.body.push({ ...this.body[this.body.length - 1] });
-    }
-    this.newSegments = 0;
-  }
-
-  equalPosition(pos1, pos2) {
-    return pos1.x === pos2.x && pos1.y === pos2.y ? true : false;
   }
 
   updateDirection(event) {

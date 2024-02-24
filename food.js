@@ -4,6 +4,7 @@ export default class Food {
     this.color = color;
   }
 
+  // updated when eaten by a snake:
   update(x, y, color) {
     this.position = { x, y };
     this.color = color || this.color;
@@ -11,6 +12,7 @@ export default class Food {
     foodElement.style.backgroundColor = this.color;
   }
 
+  // drawn at game start and every game update:
   draw() {
     const foodElement = document.createElement("div");
     foodElement.style.gridRowStart = this.position.y;
