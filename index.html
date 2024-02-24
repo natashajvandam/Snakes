@@ -4,11 +4,49 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>snakes</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
-  <body>
-    <div id="scoreBoard"></div>
-    <div id="grid"></div>
+  <body id="body">
+    <!-- setup step one -->
+    <div class="setup" id="step1">
+      <h1 id="setup_title">Snakes</h1>
+      <div id="setup_grid">
+        <button class="setup_grid_button">1</button>
+        <button class="setup_grid_button">2</button>
+        <button class="setup_grid_button">3</button>
+        <button class="setup_grid_button">4</button>
+      </div>
+    </div>
+    <!-- setup step two (iterate for each snake) -->
+    <div class="setup" id="step2">
+      <div class="setup_section_title">
+        <h3 id="setup_snake_name">Snake Name:</h3>
+      </div>
+      <div class="setup_section_name_color">
+        <input type="text" id="setup_name"/>
+        <div id="color_square"></div>
+      </div>
+      <div class="setup_section_title">
+        <h3 id="setup_snake_control">Snake Control:</h3>
+      </div>
+      <div id="setup_control_grid">
+        <input class="setup_control_grid_input" autocomplete="off" id="input_up"></input>
+        <input class="setup_control_grid_input" autocomplete="off" id="input_left"></input>
+        <input class="setup_control_grid_input" autocomplete="off" id="input_down"></input>
+        <input class="setup_control_grid_input" autocomplete="off" id="input_right"></input>
+      </div>
+      <div class="setup_section_button">
+        <button id="setup_back_button">
+          <span class="material-symbols-outlined">arrow_back_ios</span>
+        </button>
+        <button id="setup_next_button">
+          <span class="material-symbols-outlined">arrow_forward_ios</span>
+        </button>
+    </div>
+    <!-- render after game starts: -->
+    <!-- <div id="scoreBoard"></div>
+    <div id="grid"></div> -->
     <script src="script.js" defer type="module"></script>
   </body>
 </html>

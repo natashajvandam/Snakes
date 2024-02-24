@@ -1,6 +1,5 @@
 export default class Grid {
   constructor(gridSize = 22) {
-    document.getElementById("grid").innerHTML = "";
     this.occupiedSquares = [];
     this.gridSize = gridSize;
   }

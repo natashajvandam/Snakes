@@ -1,16 +1,39 @@
-import Game from "./game.js";
+import { goToStep2 } from "./setup.js";
+import Game  from "./game.js";
 
 let lastRenderTime = 0;
-const game = new Game();
-if (game.snakes?.length === 0) {
-  game.addSnake("snake1", {x: 12, y: 12}, {up: "w", down: "s", left: "a", right: "d"}, "green");
-  game.addSnake("snake2", {x: 15, y: 15}, {up: "ArrowUp", down:"ArrowDown", left: "ArrowLeft", right: "ArrowRight"}, "blue");
-  game.addSnake("snake3", {x: 18, y: 18}, {up: "i", down: "k", left: "j",right: "l"}, "red");
+let snakeValues;
+let game;
+
+if (!snakeValues) {
+  const snakeCountButtons = document.getElementsByClassName("setup_grid_button");
+  for (let i = 0; i < snakeCountButtons.length; i++) {
+    snakeCountButtons[i].addEventListener("click", (e) => {
+      snakeValues = goToStep2(e.target.innerHTML);
+    });
+  }
+}
+
+export function createGame (values) {
+  document.getElementById("step2").style.display = "none";
+  let div = document.createElement("div");
+  div.setAttribute("id", "scoreBoard");
+  document.getElementById("body").appendChild(div);
+  div = document.createElement("div");
+  div.setAttribute("id", "grid");
+  document.getElementById("body").appendChild(div);
+  game = new Game();
+  window.requestAnimationFrame(main);
+  for (let i = 0; i < values.length; i++) {
+    const x = Math.floor(Math.random() * game.grid.gridSize) + 1;
+    const y = Math.floor(Math.random() * game.grid.gridSize) + 1;
+    game.addSnake(values[i].name, {x, y}, {up: values[i].up, down: values[i].down, left: values[i].left, right: values[i].right}, values[i].color);
+  }
   game.start();
 }
 
-function main(currentTime) {
-  if (!game.gameGoing) {
+export function main(currentTime) {
+  if (game.gameGoing === false) {
     if (confirm('You loose. Press "ok" to play again.')) {
       window.location = "/";
     }
@@ -28,4 +51,4 @@ function main(currentTime) {
   lastRenderTime = currentTime;
   game.update();
 }
-window.requestAnimationFrame(main);
+

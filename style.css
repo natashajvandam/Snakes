@@ -8,13 +8,137 @@
 body {
   margin: none;
   padding: none;
-  background: rgb(199, 165, 71);
+  background-image: linear-gradient(to bottom right, rgb(124, 146, 24), rgb(235, 212, 61));
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
   height: 100vh;
+  font-family: "Arvo", serif;
 }
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+input {
+  border-style: none;
+  border-radius: 8px;
+  padding: 10px;
+  color: rgb(22, 59, 10);
+  font-size: 20px;
+}
+
+.setup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 300px;
+}
+
+#setup_title {
+  font-family: "Arvo", serif;
+  font-size: 30px;
+  margin: 10px;
+  color:rgb(72, 16, 169);
+}
+
+#step2 {
+  display: none;
+}
+
+#setup_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  width: 60vmin;
+  height: 60vmin;
+  gap: 10px;
+}
+
+
+button {
+  font-family: "Arvo", serif;
+  font-size: 20px;
+  background: rgb(164, 166, 55);
+  box-shadow: -3px -3px 8px 0px rgba(0, 0, 0, 0.251);
+  border: none;
+  border-radius: 15%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color:rgb(72, 16, 169);
+}
+
+.setup_grid_button {
+  width: 30vmin;
+  height: 30vmin;
+}
+
+button:hover {
+  background: rgb(72, 16, 169);
+  color: rgb(212, 213, 113);;
+}
+
+.setup_section_title {
+  padding: 20px 0;
+  width: 60vmin;
+  color:rgb(22, 59, 10);
+}
+
+#setup_control_grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 10px;
+  width: 60vmin;
+  height: 60vmin;
+  margin: 10px;
+}
+
+#input_up {
+  grid-column: 2 / span 1;
+}
+
+#input_left, #input_right, #input_down {
+  grid-row: 2 / span 1;
+}
+
+.setup_control_grid_input { 
+  width: 15vmin;
+}
+
+.setup_section_button {
+  width: 60vmin;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.setup_section_name_color {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 60vmin;
+}
+
+#color_square {
+  width: 30px;
+  height: 30px;
+  margin: 20px;
+}
+
+#setup_next_button {
+  padding: 10px;
+}
+
 
 #grid {
   background: white;
