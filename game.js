@@ -4,13 +4,13 @@ import Grid from "./grid.js";
 import ScoreBoard from "./scoreBoard.js";
 
 export default class Game {
-  constructor(gridSize = 22) {
+  constructor(gridSize, speed, expansionRate) {
     this.snakes = [];
     this.grid = new Grid(gridSize);
     this.gameGoing = true;
-    this.food = new Food(3, 10, "red")
-    this.expansionRate = 5;
-    this.gameSpeed = 7;
+    this.food = new Food(3, 10, "red");
+    this.expansionRate = expansionRate;
+    this.gameSpeed = speed;
     this.lastRenderTime = 0;
     this.scoreBoard = new ScoreBoard();
   }
@@ -62,8 +62,12 @@ export default class Game {
       if (snake.equalPosition(snake.head(), this.food.position)) {
         snake.expand(this.expansionRate);
         this.scoreBoard.update(snake);
-        const { x, y } = this.grid.getRandomFoodPosition();
-        this.food = new Food(x, y, "red");
+        const { x, y } = this.grid.getRandomFoodPosition(
+          this.snakes.flatMap((s) => s.body)
+        );
+        const randomColor =
+          "#" + Math.floor(Math.random() * 16777215).toString(16);
+        this.food.update(x, y, randomColor);
         this.increaseGrowth();
         this.increaseSpeed();
       }

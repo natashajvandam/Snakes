@@ -4,8 +4,13 @@ export default class Grid {
     this.gridSize = gridSize;
   }
 
-  getRandomFoodPosition() {
-    const newFoodPosition = this.randomGridPosition();
+  getRandomFoodPosition(occupiedSquares) {
+    let newFoodPosition = this.randomGridPosition();
+    while (
+      occupiedSquares.some((pos) => this.equalPosition(pos, newFoodPosition))
+    ) {
+      newFoodPosition = this.randomGridPosition();
+    }
     return newFoodPosition;
   }
 
@@ -23,5 +28,9 @@ export default class Grid {
       position.y > this.gridSize ||
       position.y < 1
     );
+  }
+
+  equalPosition(pos1, pos2) {
+    return pos1.x === pos2.x && pos1.y === pos2.y ? true : false;
   }
 }

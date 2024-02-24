@@ -4,8 +4,11 @@ export default class Food {
     this.color = color;
   }
 
-  update(x, y) {
+  update(x, y, color) {
     this.position = { x, y };
+    this.color = color || this.color;
+    const foodElement = document.createElement("div");
+    foodElement.style.backgroundColor = this.color;
   }
 
   draw() {

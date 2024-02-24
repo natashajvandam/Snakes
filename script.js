@@ -1,12 +1,16 @@
 import { goToStep2 } from "./setup.js";
-import Game  from "./game.js";
+import Game from "./game.js";
 
 let lastRenderTime = 0;
 let snakeValues;
 let game;
+const GRID_SIZE = 27;
+const GAME_SPEED = 8;
+const EXPANSION_RATE = 2;
 
 if (!snakeValues) {
-  const snakeCountButtons = document.getElementsByClassName("setup_grid_button");
+  const snakeCountButtons =
+    document.getElementsByClassName("setup_grid_button");
   for (let i = 0; i < snakeCountButtons.length; i++) {
     snakeCountButtons[i].addEventListener("click", (e) => {
       snakeValues = goToStep2(e.target.innerHTML);
@@ -14,7 +18,7 @@ if (!snakeValues) {
   }
 }
 
-export function createGame (values) {
+export function createGame(values) {
   document.getElementById("step2").style.display = "none";
   let div = document.createElement("div");
   div.setAttribute("id", "scoreBoard");
@@ -22,19 +26,53 @@ export function createGame (values) {
   div = document.createElement("div");
   div.setAttribute("id", "grid");
   document.getElementById("body").appendChild(div);
-  game = new Game();
+  document.getElementById(
+    "grid"
+  ).style.gridTemplateColumns = `repeat(${GRID_SIZE}, 1fr)`;
+  document.getElementById(
+    "grid"
+  ).style.gridTemplateRows = `repeat(${GRID_SIZE}, 1fr)`;
+  game = new Game(GRID_SIZE, GAME_SPEED, EXPANSION_RATE);
   window.requestAnimationFrame(main);
   for (let i = 0; i < values.length; i++) {
     const x = Math.floor(Math.random() * game.grid.gridSize) + 1;
     const y = Math.floor(Math.random() * game.grid.gridSize) + 1;
-    game.addSnake(values[i].name, {x, y}, {up: values[i].up, down: values[i].down, left: values[i].left, right: values[i].right}, values[i].color);
+    console.log(values[i].color);
+    game.addSnake(
+      values[i].name,
+      { x, y },
+      {
+        up: values[i].up,
+        down: values[i].down,
+        left: values[i].left,
+        right: values[i].right,
+      },
+      values[i].color
+    );
   }
   game.start();
 }
 
+function findWinner(snakes) {
+  let winner = snakes[0];
+  let wasItATie = false;
+  for (let i = 1; i < snakes.length; i++) {
+    if (snakes[i].score > winner.score) {
+      winner = snakes[i];
+    } else if (snakes[i].score === winner.score) {
+      wasItATie = true;
+    }
+  }
+  return { winner, wasItATie };
+}
+
 export function main(currentTime) {
   if (game.gameGoing === false) {
-    if (confirm('You loose. Press "ok" to play again.')) {
+    const { winner, wasItATie } = findWinner(game.snakes);
+    const text = wasItATie
+      ? "It was a tie! Press 'ok' to play again."
+      : `${winner.name} won!!! Press "ok" to play again.`;
+    if (confirm(text)) {
       window.location = "/";
     }
     return;
@@ -51,4 +89,3 @@ export function main(currentTime) {
   lastRenderTime = currentTime;
   game.update();
 }
-

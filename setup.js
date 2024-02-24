@@ -21,32 +21,30 @@ export const defaultSnakes = [
     left: "j",
     right: "l",
   },
-    {
+  {
     name: "Snake4",
     up: "t",
     down: "g",
     left: "f",
     right: "h",
-    }
+  },
 ];
 
 let snakeIndex = 0;
 let actualSnakeValues = [];
 
 export function goToStep1() {
-  document.getElementById("step1").style.display = "flex";
-  document.getElementById("step2").style.display = "none";
+  window.location = "/";
 }
 
 export function goToStep2(snakeCount) {
   // listen for "back" and "next" button clicks:
-  document.getElementById("setup_back_button").addEventListener("click", () => {
-    actualSnakeValues = [];
-    goToStep1();
-  });
-  document.getElementById("setup_next_button").addEventListener("click", () => {
-    onNext(snakeCount)
-  });
+  document
+    .getElementById("setup_back_button")
+    .addEventListener("click", () => goToStep1());
+  document
+    .getElementById("setup_next_button")
+    .addEventListener("click", () => onNext(snakeCount));
   // show step 2 instead of step 1:
   document.getElementById("step1").style.display = "none";
   document.getElementById("step2").style.display = "flex";
@@ -61,7 +59,8 @@ function setDefaultValues() {
   document.getElementById(`input_up`).value = defaultSnakes[snakeIndex].up;
   document.getElementById(`input_down`).value = defaultSnakes[snakeIndex].down;
   document.getElementById(`input_left`).value = defaultSnakes[snakeIndex].left;
-  document.getElementById(`input_right`).value = defaultSnakes[snakeIndex].right;  
+  document.getElementById(`input_right`).value =
+    defaultSnakes[snakeIndex].right;
 }
 
 function onNext(snakeCount) {
@@ -73,7 +72,7 @@ function onNext(snakeCount) {
   setDefaultValues();
 }
 
-function setSnakeDetails () {
+function setSnakeDetails() {
   const name = document.getElementById(`setup_name`).value;
   const up = document.getElementById(`input_up`).value;
   const down = document.getElementById(`input_down`).value;
@@ -82,5 +81,3 @@ function setSnakeDetails () {
   const color = document.getElementById("color_square").style.backgroundColor;
   actualSnakeValues.push({ name, up, down, left, right, color });
 }
-
-

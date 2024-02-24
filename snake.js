@@ -1,5 +1,5 @@
 export default class Snake {
-  constructor(name, {x, y}, {up, down, left, right}, color) {
+  constructor(name, { x, y }, { up, down, left, right }, color) {
     this.body = [{ x, y }];
     this.newSegments = 0;
     this.inputDirection = { x: 0, y: 0 };
@@ -34,7 +34,7 @@ export default class Snake {
       snakeElement.style.gridRowStart = seg.y;
       snakeElement.style.gridColumnStart = seg.x;
       snakeElement.style.backgroundColor = this.color;
-      snakeElement.classList.add('snake');
+      snakeElement.classList.add("snake");
       document.getElementById("grid").appendChild(snakeElement);
     });
   }
@@ -56,7 +56,7 @@ export default class Snake {
     if (
       this.hitEdgeOfGrid(gridSize) ||
       this.hitSelf() ||
-      this.hitOtherSnake(otherBody) || 
+      this.hitOtherSnake(otherBody) ||
       (otherBody.length && this.eatenByOtherSnake(otherHead))
     ) {
       this.remove();
