@@ -58,16 +58,10 @@ export default class Snake {
 
   /*
     Every time the snake eats food, the newSegments 
-    property is increased by the expansionRate. And 
-    the snake's score is updated:
+    property is increased by the expansionRate:
   */
-  updateScore() {
-    this.score++;
-    document.getElementById(`${this.name}_score`).innerHTML = `${this.score}`;
-  }
-
-  expand(amount) {
-    this.newSegments += amount;
+  expand(expansionRate) {
+    this.newSegments += expansionRate;
   }
   
   /*
