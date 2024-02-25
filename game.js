@@ -69,9 +69,7 @@ export default class Game {
         const { x, y } = this.grid.getRandomFoodPosition(
           this.snakes.flatMap((s) => s.body)
         );
-        const randomColor =
-          "#" + Math.floor(Math.random() * 16777215).toString(16);
-        this.food.update(x, y, randomColor);
+        this.food.update(x, y);
         this.increaseGrowth();
         this.increaseSpeed();
       }

@@ -5,9 +5,8 @@ export default class Food {
   }
 
   // updated when eaten by a snake:
-  update(x, y, color) {
+  update(x, y) {
     this.position = { x, y };
-    this.color = color || this.color;
     const foodElement = document.createElement("div");
     foodElement.style.backgroundColor = this.color;
   }

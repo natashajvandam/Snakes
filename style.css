@@ -33,6 +33,7 @@ body {
 
 /* This is the food in the game: */
 .food {
+  background-color: red;
   border: solid rgb(219, 218, 218) 3px;
   border-radius: 50%;
 }

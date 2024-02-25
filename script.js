@@ -7,8 +7,8 @@ let game;
 // Constants values for the game (not configurable by user yet):
 const GRID_SIZE = 27;
 const GAME_SPEED = 8;
-const EXPANSION_RATE = 2;
-const SNAKE_COUNT = 4;
+const EXPANSION_RATE = 6;
+const SNAKE_COUNT = 2; // max is 4
 
 function randomColor() {
   var h0 = Math.floor(Math.random()*16);
@@ -33,7 +33,6 @@ function createGame() {
     const y = Math.floor(Math.random() * game.grid.gridSize) + 1;
     // get a random color for the snake:
     const color = randomColor();
-    console.log(color);
     // get the default values for the snake's name, color, and controls:
     const {up, down, left, right, name} = DEFAULT_SNAKES[i];
     game.addSnake( name, { x, y }, { up, down, left, right }, color);
