@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 export default class Snake {
   constructor(name, { x, y }, { up, down, left, right }, color) {
     this.body = [{ x, y }];
@@ -45,14 +47,14 @@ export default class Snake {
     For each segment in the body array, create a div 
     element and append it to the grid.
   */
-  draw() {
+  draw(scene) {
     this.body.forEach((seg) => {
-      const snakeElement = document.createElement("div");
-      snakeElement.style.gridRowStart = seg.y;
-      snakeElement.style.gridColumnStart = seg.x;
-      snakeElement.style.backgroundColor = this.color;
-      snakeElement.classList.add("snake");
-      document.getElementById("grid").appendChild(snakeElement);
+      const bodyGeometry = new THREE.BoxGeometry(1, 1, 1);
+      const material = new THREE.MeshBasicMaterial( { color: this.color } );
+      const snakeSeg = new THREE.Mesh( bodyGeometry, material );
+      snakeSeg.position.x = seg.x;
+      snakeSeg.position.y = seg.y;
+      scene.add(snakeSeg);
     });
   }
 
@@ -124,7 +126,7 @@ export default class Snake {
   remove() {
     let snakeElements = document.getElementsByClassName(this.name);
     while (snakeElements.length > 0) {
-      document.getElementById("grid").removeChild(snakeElements[0]);
+      // document.getElementById("grid").removeChild(snakeElements[0]);
     }
     this.isAlive = false;
     this.body = [{}];

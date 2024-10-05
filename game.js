@@ -4,40 +4,44 @@ import Grid from "./grid.js";
 import ScoreBoard from "./scoreBoard.js";
 
 export default class Game {
-  constructor(gridSize, speed, expansionRate) {
+  constructor(scene, renderer, gridSize, speed, expansionRate) {
     this.snakes = [];
     this.grid = new Grid(gridSize);
     this.gameGoing = true;
-    this.food = new Food(3, 10, "red");
+    this.food = new Food(3.5, 10.5, "red");
     this.expansionRate = expansionRate;
     this.gameSpeed = speed;
     this.lastRenderTime = 0;
     this.scoreBoard = new ScoreBoard();
+    this.renderer = renderer;
+    this.scene = scene;
   }
 
   // At game creation, this function is called for each snake:
   addSnake(name, spawnSpot, directions, color) {
     const snake = new Snake(name, spawnSpot, directions, color);
     this.snakes.push(snake);
-    snake.draw();
+    snake.draw(this.scene);
   }
 
   // Once all snakes are added to the game, this function starts the game:
   start() {
-    document.getElementById("grid").innerHTML = "";
+    this.grid.draw(this.scene);
+
+    // // document.getElementById("grid").innerHTML = "";
     this.snakes.forEach((snake) => {
-      snake.draw();
+      snake.draw(this.scene);
       window.addEventListener("keydown", (e) => snake.updateDirection(e));
     });
     this.scoreBoard.draw(this.snakes);
-    this.food.draw();
+    this.food.draw(this.scene);
   }
 
   // Update runs every frame after game starts:
   update() {
     this.checkIfSnakesAteFood();
-    document.getElementById("grid").innerHTML = ""; 
-    this.food.draw();
+    // document.getElementById("grid").innerHTML = ""; 
+    this.food.draw(this.scene);
     this.checkForDeaths();
   }
 
@@ -53,7 +57,7 @@ export default class Game {
         });
       if (snake.isAlive) {
           snake.update();
-          snake.draw();
+          snake.draw(this.scene);
         }
     });
     if (this.snakes.every((snake) => snake.isAlive === false)) {

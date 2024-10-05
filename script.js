@@ -1,46 +1,43 @@
 import { DEFAULT_SNAKES } from "./setup.js";
 import Game from "./game.js";
+import { GRID_SIZE, GAME_SPEED, EXPANSION_RATE, SNAKE_COUNT, RANDOM_COLOR } from "./constants.js";
+import * as THREE from "three";
 
 let lastRenderTime = 0; // this is important for game frame rate
 let game;
+const renderer = new THREE.WebGLRenderer();
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-// Constants values for the game (not configurable by user yet):
-const GRID_SIZE = 27;
-const GAME_SPEED = 8;
-const EXPANSION_RATE = 6;
-const SNAKE_COUNT = 2; // max is 4
-
-function randomColor() {
-  var h0 = Math.floor(Math.random()*16);
-  var h1 = Math.floor(Math.random()*16);
-  var h2 = Math.floor(Math.random()*16);
-  var h3 = Math.floor(Math.random()*16);
-  var h4 = Math.floor(Math.random()*16);
-  var h5 = Math.floor(Math.random()*16);
-  return '#' + h0.toString(16) + h1.toString(16) + h2.toString(16) + h3.toString(16) + h4.toString(16) + h5.toString(16);
-}
 
 // This function uses the constants to create a game:
 function createGame() {
-  grid.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 1fr)`;
-  grid.style.gridTemplateRows = `repeat(${GRID_SIZE}, 1fr)`;
-  game = new Game(GRID_SIZE, GAME_SPEED, EXPANSION_RATE);
+  renderer.setSize( window.innerWidth, window.innerHeight );
+  renderer.shadowMap.enabled = true;
+  document.body.appendChild( renderer.domElement );
+
+  camera.position.z = 50;
+  const directionalLight = new THREE.PointLight(0xffffff, 1, 500, 0.01);
+  directionalLight.castShadow = true;
+  directionalLight.position.z = -20;
+  scene.add(directionalLight);
+
+  game = new Game(scene, renderer, GRID_SIZE, GAME_SPEED, EXPANSION_RATE);
   
   // Add each snake to the game:
   for (let i = 0; i < SNAKE_COUNT; i++) {
     // get a random position for the snake to spawn:
-    const x = Math.floor(Math.random() * game.grid.gridSize) + 1;
-    const y = Math.floor(Math.random() * game.grid.gridSize) + 1;
+    const {x, y} = game.grid.randomGridPosition();
     // get a random color for the snake:
-    const color = randomColor();
+    const color = RANDOM_COLOR();
     // get the default values for the snake's name, color, and controls:
     const {up, down, left, right, name} = DEFAULT_SNAKES[i];
     game.addSnake( name, { x, y }, { up, down, left, right }, color);
   }
-  
+
   // Trigger the start of the game
   game.start();
-  window.requestAnimationFrame(main);
+  renderer.setAnimationLoop( animate );
 }
 
 /* 
@@ -48,7 +45,7 @@ function createGame() {
   it will call the update function of the game class over and over until
   all snakes are dead.
 */
-function main(currentTime) {
+function animate() {
   // If game is no longer going - prompt user to play again:
   if (game.gameGoing === false) {
     if (confirm('Press "ok" to play again.')) {
@@ -58,16 +55,7 @@ function main(currentTime) {
   }
 
   // this is how it loops - it calls itself over and over again:
-  window.requestAnimationFrame(main);
-  
-  const secondsSinceLastRenderTime = (currentTime - lastRenderTime) / 1000;
-  if (secondsSinceLastRenderTime < 1 / game.gameSpeed) { // this is the game speed
-    return;
-  }
-  lastRenderTime = currentTime;
-
-  // this calls for the next frame of the game:
-  game.update();
+  renderer.render( scene, camera );
 }
 
 createGame(); // This is the first thing that runs when the page loads
