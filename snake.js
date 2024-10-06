@@ -1,12 +1,12 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
 export default class Snake {
   constructor(name, { x, y }, { up, down, left, right }, color) {
     const bodyGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial( { color } );
-    const snakeSeg = new THREE.Mesh( bodyGeometry, material );
+    const material = new THREE.MeshBasicMaterial({ color });
+    const snakeSeg = new THREE.Mesh(bodyGeometry, material);
     snakeSeg.position.x = x;
-    snakeSeg.position.y = y; 
+    snakeSeg.position.y = y;
 
     this.body = [snakeSeg];
     this.newSegments = 0;
@@ -40,19 +40,19 @@ export default class Snake {
     }
     this.newSegments = 0;
     // After moving all the other segments, move the head:
-    this.body[0].position.x += direction.x;
-    this.body[0].position.y += direction.y;
+    this.head().x += direction.x;
+    this.head().y += direction.y;
   }
 
   addSegments() {
     const bodyGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial( { color: this.color} );
-    
+    const material = new THREE.MeshBasicMaterial({ color: this.color });
+
     for (let i = 0; i < this.newSegments; i++) {
-      const snakeSeg = new THREE.Mesh( bodyGeometry, material );
+      const snakeSeg = new THREE.Mesh(bodyGeometry, material);
       snakeSeg.position.x = this.body[this.body.length - 1].position.x;
       snakeSeg.position.y = this.body[this.body.length - 1].position.y;
-      this.body.push(snakeSeg); 
+      this.body.push(snakeSeg);
     }
     this.newSegments = 0;
   }
@@ -74,27 +74,20 @@ export default class Snake {
   expand(expansionRate) {
     this.newSegments += expansionRate;
   }
-  
-  /*
-    The checkDeath function is called every frame
-    to see if the snake has died. If it has, the
-    remove function is called.
-  */
-  checkDeath(otherBody, otherHead, gridSize) {
-    if (
-      this.hitEdgeOfGrid(gridSize) ||
-      this.hitSelf() ||
-      (otherBody.length && this.hitOtherSnake(otherBody)) ||
-      (otherBody.length && this.eatenByOtherSnake(otherHead))
-    ) {
-      this.remove();
-      return true;
-    }
-  }
 
   hitEdgeOfGrid(gridSize) {
-    const head = this.head();
-    return Math.abs(head.x) >= gridSize / 2 || Math.abs(head.y) >= gridSize / 2;
+    const externalBound = gridSize / 2;
+    return (
+      Math.abs(this.head().x) >= externalBound - 1 ||
+      Math.abs(this.head().y) >= externalBound - 1
+    );
+  }
+
+  checkCollision(otherSnakes) {
+    return otherSnakes.some((otherSnake) => {
+      const [head, ...bodySansHead] = otherSnake.body;
+      return this.hitOtherSnake(bodySansHead) || this.eatenByOtherSnake(head);
+    });
   }
 
   hitOtherSnake(otherSnakeSegments) {
@@ -105,7 +98,7 @@ export default class Snake {
   }
 
   eatenByOtherSnake(otherHead) {
-    return this.equalPosition(this.body[0].position, otherHead.position);
+    return this.equalPosition(this.head(), otherHead.position);
   }
 
   hitSelf() {
@@ -119,7 +112,7 @@ export default class Snake {
       if (ignoreHead && index === 0) {
         return false;
       }
-      return this.equalPosition(seg, position);
+      return this.equalPosition(seg.position, position);
     });
   }
 
@@ -132,9 +125,10 @@ export default class Snake {
     and set isAlive to false. Also remove the event
     listener for the snake's controls.
   */
-  remove() {
-    while (body.length > 0) {
-      scene.remove(body.pop());
+  remove(scene) {
+    while (this.body.length > 0) {
+      const segment = this.body.pop();
+      scene.remove(segment);
     }
     this.isAlive = false;
     window.removeEventListener("keydown", (e) => this.updateDirection(e));

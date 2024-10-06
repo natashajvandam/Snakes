@@ -14,13 +14,6 @@ export default class Food {
     this.color = color;
   }
 
-  // updated when eaten by a snake:
-  update(x, y, scene) {
-    this.foodMesh.position.x = x;
-    this.foodMesh.position.y = y;
-    scene.add(this.foodMesh);
-  }
-
   // drawn at game start and every game update:
   draw(scene) {
     scene.add(this.foodMesh);

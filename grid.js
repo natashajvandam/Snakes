@@ -3,7 +3,7 @@ import * as THREE from "three";
 export default class Grid {
   constructor(gridSize = 22) {
     this.occupiedSquares = [];
-    this.gridSize = gridSize;
+    this.size = gridSize;
   }
 
   /* 
@@ -22,9 +22,10 @@ export default class Grid {
 
   // This is a helper function for getRandomFoodPosition:
   randomGridPosition() {
+    const edge = this.size / 2;
     return {
-      x: Math.floor(Math.random() * (this.gridSize / 2)) + 0.5,
-      y: Math.floor(Math.random() * (this.gridSize / 2)) + 0.5,
+      x: Math.floor(Math.random() * edge) - 0.5,
+      y: Math.floor(Math.random() * edge) - 0.5,
     };
   }
 
@@ -34,33 +35,33 @@ export default class Grid {
   }
 
   draw(scene) {
-    const grid = new THREE.GridHelper( this.gridSize, this.gridSize, "grey", "grey");
+    const grid = new THREE.GridHelper(this.size, this.size, "grey", "grey");
     grid.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
     grid.position.z = -1;
     scene.add(grid);
 
-    const borderGeometry = new THREE.BoxGeometry(this.gridSize - 2, 1, 1);
-    const material = new THREE.MeshBasicMaterial( { color: "pink" } );
-    
+    const borderGeometry = new THREE.BoxGeometry(this.size - 2, 1, 1);
+    const material = new THREE.MeshBasicMaterial({ color: "pink" });
+
     // top boundary
-    const borderUP = new THREE.Mesh( borderGeometry, material );
-    borderUP.position.y = this.gridSize/ 2 + 0.3;
+    const borderUP = new THREE.Mesh(borderGeometry, material);
+    borderUP.position.y = this.size / 2 + 0.3;
     scene.add(borderUP);
 
     // bottom boundary
-    const borderDOWN = new THREE.Mesh( borderGeometry, material );
-    borderDOWN.position.y = -this.gridSize/ 2 - 0.3;
+    const borderDOWN = new THREE.Mesh(borderGeometry, material);
+    borderDOWN.position.y = -this.size / 2 - 0.3;
     scene.add(borderDOWN);
 
     // left boundary
-    const borderLEFT = new THREE.Mesh( borderGeometry, material );
-    borderLEFT.position.x = -this.gridSize/ 2 - 0.3;
+    const borderLEFT = new THREE.Mesh(borderGeometry, material);
+    borderLEFT.position.x = -this.size / 2 - 0.3;
     borderLEFT.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
     scene.add(borderLEFT);
 
     // right boundary
-    const borderRIGHT = new THREE.Mesh( borderGeometry, material );
-    borderRIGHT.position.x = this.gridSize/ 2 + 0.3;
+    const borderRIGHT = new THREE.Mesh(borderGeometry, material);
+    borderRIGHT.position.x = this.size / 2 + 0.3;
     borderRIGHT.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
     scene.add(borderRIGHT);
   }
