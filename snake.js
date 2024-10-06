@@ -2,7 +2,13 @@ import * as THREE from 'three';
 
 export default class Snake {
   constructor(name, { x, y }, { up, down, left, right }, color) {
-    this.body = [{ x, y }];
+    const bodyGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial( { color } );
+    const snakeSeg = new THREE.Mesh( bodyGeometry, material );
+    snakeSeg.position.x = x;
+    snakeSeg.position.y = y; 
+
+    this.body = [snakeSeg];
     this.newSegments = 0;
     this.inputDirection = { x: 0, y: 0 };
     this.lastInputDirection = { x: 0, y: 0 };
@@ -18,7 +24,7 @@ export default class Snake {
 
   // The head of the snake is the first element in the body array:
   head() {
-    return this.body[0];
+    return this.body[0].position;
   }
 
   /* 
@@ -26,19 +32,27 @@ export default class Snake {
     of the segment in front of it.
   */
   update() {
-    this.addSegments();
     const direction = this.getInputDirection();
+    this.newSegments && this.addSegments();
     for (let i = this.body.length - 2; i >= 0; i--) {
-      this.body[i + 1] = { ...this.body[i] };
+      this.body[i + 1].position.x = this.body[i].position.x;
+      this.body[i + 1].position.y = this.body[i].position.y;
     }
+    this.newSegments = 0;
     // After moving all the other segments, move the head:
-    this.body[0].x += direction.x;
-    this.body[0].y += direction.y;
+    this.body[0].position.x += direction.x;
+    this.body[0].position.y += direction.y;
   }
 
   addSegments() {
+    const bodyGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial( { color: this.color} );
+    
     for (let i = 0; i < this.newSegments; i++) {
-      this.body.push({ ...this.body[this.body.length - 1] });
+      const snakeSeg = new THREE.Mesh( bodyGeometry, material );
+      snakeSeg.position.x = this.body[this.body.length - 1].position.x;
+      snakeSeg.position.y = this.body[this.body.length - 1].position.y;
+      this.body.push(snakeSeg); 
     }
     this.newSegments = 0;
   }
@@ -49,12 +63,7 @@ export default class Snake {
   */
   draw(scene) {
     this.body.forEach((seg) => {
-      const bodyGeometry = new THREE.BoxGeometry(1, 1, 1);
-      const material = new THREE.MeshBasicMaterial( { color: this.color } );
-      const snakeSeg = new THREE.Mesh( bodyGeometry, material );
-      snakeSeg.position.x = seg.x;
-      snakeSeg.position.y = seg.y;
-      scene.add(snakeSeg);
+      scene.add(seg);
     });
   }
 
@@ -75,7 +84,7 @@ export default class Snake {
     if (
       this.hitEdgeOfGrid(gridSize) ||
       this.hitSelf() ||
-      this.hitOtherSnake(otherBody) ||
+      (otherBody.length && this.hitOtherSnake(otherBody)) ||
       (otherBody.length && this.eatenByOtherSnake(otherHead))
     ) {
       this.remove();
@@ -85,18 +94,18 @@ export default class Snake {
 
   hitEdgeOfGrid(gridSize) {
     const head = this.head();
-    return head.x < 1 || head.x > gridSize || head.y < 1 || head.y > gridSize;
+    return Math.abs(head.x) >= gridSize / 2 || Math.abs(head.y) >= gridSize / 2;
   }
 
   hitOtherSnake(otherSnakeSegments) {
     const head = this.head();
     return this.body.length > 1
-      ? otherSnakeSegments.some((seg) => this.equalPosition(seg, head))
+      ? otherSnakeSegments.some((seg) => this.equalPosition(seg.position, head))
       : false;
   }
 
   eatenByOtherSnake(otherHead) {
-    return this.equalPosition(this.body[0], otherHead);
+    return this.equalPosition(this.body[0].position, otherHead.position);
   }
 
   hitSelf() {
@@ -124,12 +133,10 @@ export default class Snake {
     listener for the snake's controls.
   */
   remove() {
-    let snakeElements = document.getElementsByClassName(this.name);
-    while (snakeElements.length > 0) {
-      // document.getElementById("grid").removeChild(snakeElements[0]);
+    while (body.length > 0) {
+      scene.remove(body.pop());
     }
     this.isAlive = false;
-    this.body = [{}];
     window.removeEventListener("keydown", (e) => this.updateDirection(e));
   }
 
@@ -139,13 +146,13 @@ export default class Snake {
         if (this.lastInputDirection.y !== 0) {
           break;
         }
-        this.inputDirection = { x: 0, y: -1 };
+        this.inputDirection = { x: 0, y: 1 };
         break;
       case this.down:
         if (this.lastInputDirection.y !== 0) {
           break;
         }
-        this.inputDirection = { x: 0, y: 1 };
+        this.inputDirection = { x: 0, y: -1 };
         break;
       case this.right:
         if (this.lastInputDirection.x !== 0) {

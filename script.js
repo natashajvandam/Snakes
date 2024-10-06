@@ -8,7 +8,7 @@ let game;
 const renderer = new THREE.WebGLRenderer();
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000 );
-
+let clock = new THREE.Clock(true);
 
 // This function uses the constants to create a game:
 function createGame() {
@@ -54,6 +54,10 @@ function animate() {
     return;
   }
 
+	if (clock.getElapsedTime() > 0.09) {
+    game.update();
+		clock.start();
+	}
   // this is how it loops - it calls itself over and over again:
   renderer.render( scene, camera );
 }

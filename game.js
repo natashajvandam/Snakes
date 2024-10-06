@@ -56,9 +56,9 @@ export default class Game {
           snake.checkDeath(bodySansHead, head, this.grid.gridSize);
         });
       if (snake.isAlive) {
-          snake.update();
-          snake.draw(this.scene);
-        }
+        snake.update();
+        snake.draw(this.scene);
+      }
     });
     if (this.snakes.every((snake) => snake.isAlive === false)) {
       this.gameGoing = false;
@@ -67,13 +67,13 @@ export default class Game {
 
   checkIfSnakesAteFood() {
     this.snakes.forEach((snake) => {
-      if (snake.equalPosition(snake.head(), this.food.position)) {
+      if (snake.equalPosition(snake.head(), this.food.foodMesh.position)) {
         snake.expand(this.expansionRate);
         this.scoreBoard.update(snake);
         const { x, y } = this.grid.getRandomFoodPosition(
           this.snakes.flatMap((s) => s.body)
         );
-        this.food.update(x, y);
+        this.food.update(x, y, this.scene);
         this.increaseGrowth();
         this.increaseSpeed();
       }
