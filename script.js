@@ -1,6 +1,7 @@
 import { DEFAULT_SNAKES } from "./setup.js";
 import Game from "./game.js";
-import { GRID_SIZE, GAME_SPEED, EXPANSION_RATE, SNAKE_COUNT, RANDOM_COLOR } from "./constants.js";
+import { GRID_SIZE, GAME_SPEED, EXPANSION_RATE, SNAKE_COUNT } from "./constants.js";
+import { RANDOM_COLOR } from "./utils.js";
 import * as THREE from "three";
 
 let lastRenderTime = 0; // this is important for game frame rate
