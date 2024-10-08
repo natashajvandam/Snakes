@@ -27,7 +27,7 @@ function createGame() {
   document.body.appendChild(renderer.domElement);
 
   camera.position.z = 50;
-  const directionalLight = new THREE.PointLight(0xffffff, 1, 500, 0.01);
+  const directionalLight = new THREE.PointLight(0xffffff, 9, 500, 0.01);
   directionalLight.castShadow = true;
   directionalLight.position.z = 20;
   directionalLight.position.x = 20;
