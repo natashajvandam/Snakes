@@ -21,5 +21,8 @@ export default class ScoreBoard {
     document.getElementById(
       `${snake.name}_score`
     ).innerHTML = `${snake.name}: ${snake.score}`;
+    document.getElementById(
+      `${snake.name}_score`
+    ).style.color = snake.color;
   }
 }
