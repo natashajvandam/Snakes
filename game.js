@@ -6,10 +6,13 @@ import { RANDOM_COLOR } from "./utils.js";
 
 export default class Game {
   constructor(scene, renderer, gridSize, speed, expansionRate) {
-    this.snakes = [];
     this.grid = new Grid(gridSize);
+    
+    const {x, y} = this.grid.randomGridPosition();
+    this.food = new Food(x, y, RANDOM_COLOR());
+
+    this.snakes = [];
     this.gameGoing = true;
-    this.food = new Food(3.5, 10.5, RANDOM_COLOR());
     this.expansionRate = expansionRate;
     this.gameSpeed = speed;
     this.lastRenderTime = 0;
@@ -22,7 +25,6 @@ export default class Game {
   addSnake(name, spawnSpot, directions, color) {
     const snake = new Snake(name, spawnSpot, directions, color);
     this.snakes.push(snake);
-    snake.draw(this.scene);
   }
 
   // Once all snakes are added to the game, this function starts the game:

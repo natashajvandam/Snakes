@@ -4,7 +4,6 @@ import { GRID_SIZE, GAME_SPEED, EXPANSION_RATE, SNAKE_COUNT } from "./constants.
 import { RANDOM_COLOR } from "./utils.js";
 import * as THREE from "three";
 
-let lastRenderTime = 0; // this is important for game frame rate
 let game;
 const renderer = new THREE.WebGLRenderer();
 const scene = new THREE.Scene();
@@ -20,7 +19,8 @@ function createGame() {
   camera.position.z = 50;
   const directionalLight = new THREE.PointLight(0xffffff, 1, 500, 0.01);
   directionalLight.castShadow = true;
-  directionalLight.position.z = -20;
+  directionalLight.position.z = 20;
+  directionalLight.position.x = 20;
   scene.add(directionalLight);
 
   game = new Game(scene, renderer, GRID_SIZE, GAME_SPEED, EXPANSION_RATE);

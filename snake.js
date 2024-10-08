@@ -1,14 +1,21 @@
 import * as THREE from "three";
+import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 
 export default class Snake {
   constructor(name, { x, y }, { up, down, left, right }, color) {
-    const bodyGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color });
-    const snakeSeg = new THREE.Mesh(bodyGeometry, material);
-    snakeSeg.position.x = x;
-    snakeSeg.position.y = y;
+    this.geometry = new RoundedBoxGeometry(1, 1, 1, 7, 0.2);
+    this.material = new THREE.MeshStandardMaterial({
+      color,
+      roughness: 0.1,
+      metalness: 0.9,
+    });
 
-    this.body = [snakeSeg];
+    const head = new THREE.Mesh(this.geometry, this.material);
+    head.position.x = x;
+    head.position.y = y;
+    head.castShadow = true;
+
+    this.body = [head];
     this.newSegments = 0;
     this.inputDirection = { x: 0, y: 0 };
     this.lastInputDirection = { x: 0, y: 0 };
@@ -20,6 +27,8 @@ export default class Snake {
     this.left = left;
     this.right = right;
     this.color = color;
+
+    this.pointLight = new THREE.PointLight(this.color, 10, 10, 0.2);
   }
 
   // The head of the snake is the first element in the body array:
@@ -42,16 +51,15 @@ export default class Snake {
     // After moving all the other segments, move the head:
     this.head().x += direction.x;
     this.head().y += direction.y;
+    this.pointLight.position.set(this.head().x, this.head().y, 1.5);
   }
 
   addSegments() {
-    const bodyGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: this.color });
-
     for (let i = 0; i < this.newSegments; i++) {
-      const snakeSeg = new THREE.Mesh(bodyGeometry, material);
+      const snakeSeg = new THREE.Mesh(this.geometry, this.material);
       snakeSeg.position.x = this.body[this.body.length - 1].position.x;
       snakeSeg.position.y = this.body[this.body.length - 1].position.y;
+      snakeSeg.castShadow = true;
       this.body.push(snakeSeg);
     }
     this.newSegments = 0;
@@ -65,6 +73,7 @@ export default class Snake {
     this.body.forEach((seg) => {
       scene.add(seg);
     });
+    scene.add(this.pointLight);
   }
 
   /*
@@ -78,8 +87,8 @@ export default class Snake {
   hitEdgeOfGrid(gridSize) {
     const externalBound = gridSize / 2;
     return (
-      Math.abs(this.head().x) >= externalBound - 1 ||
-      Math.abs(this.head().y) >= externalBound - 1
+      Math.abs(this.head().x) >= externalBound ||
+      Math.abs(this.head().y) >= externalBound
     );
   }
 

@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { RANDOM_COLOR } from "./utils.js";
 
 export default class Grid {
   constructor(gridSize = 22) {
@@ -24,8 +25,8 @@ export default class Grid {
   randomGridPosition() {
     const edge = this.size / 2;
     return {
-      x: Math.floor(Math.random() * edge) - 0.5,
-      y: Math.floor(Math.random() * edge) - 0.5,
+      x: Math.floor(Math.random() * edge),
+      y: Math.floor(Math.random() * edge),
     };
   }
 
@@ -35,33 +36,45 @@ export default class Grid {
   }
 
   draw(scene) {
-    const grid = new THREE.GridHelper(this.size, this.size, "grey", "grey");
-    grid.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
-    grid.position.z = -1;
+    // background
+    const backgroundPlane = new THREE.PlaneGeometry(this.size, this.size);
+    const backgroundMaterial = new THREE.MeshStandardMaterial({ color: RANDOM_COLOR(), roughness: 0.8, metalness: 0.9 });
+    const background = new THREE.Mesh(backgroundPlane, backgroundMaterial);
+    background.position.z = -2;
+    background.receiveShadow = true;
+    scene.add(background);
+
+    // see-through grid
+    const gridPlane = new THREE.PlaneGeometry(this.size, this.size);
+    const gridMaterial = new THREE.MeshPhysicalMaterial({ color: "white", transparent: true, opacity: 0.2 });
+    const grid = new THREE.Mesh(gridPlane, gridMaterial);
+    grid.position.z = -0.5;
+    grid.receiveShadow = false;
     scene.add(grid);
 
-    const borderGeometry = new THREE.BoxGeometry(this.size - 2, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: "pink" });
+    // walls
+    const borderGeometry = new THREE.BoxGeometry(this.size, 1, 35);
+    const material = new THREE.MeshStandardMaterial({ color: RANDOM_COLOR(), roughness: 0.9, metalness: 0.9 });
 
     // top boundary
     const borderUP = new THREE.Mesh(borderGeometry, material);
-    borderUP.position.y = this.size / 2 + 0.3;
+    borderUP.position.y = this.size / 2;
     scene.add(borderUP);
 
     // bottom boundary
     const borderDOWN = new THREE.Mesh(borderGeometry, material);
-    borderDOWN.position.y = -this.size / 2 - 0.3;
+    borderDOWN.position.y = -this.size / 2;
     scene.add(borderDOWN);
 
     // left boundary
     const borderLEFT = new THREE.Mesh(borderGeometry, material);
-    borderLEFT.position.x = -this.size / 2 - 0.3;
+    borderLEFT.position.x = -this.size / 2;
     borderLEFT.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
     scene.add(borderLEFT);
 
     // right boundary
     const borderRIGHT = new THREE.Mesh(borderGeometry, material);
-    borderRIGHT.position.x = this.size / 2 + 0.3;
+    borderRIGHT.position.x = this.size / 2;
     borderRIGHT.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
     scene.add(borderRIGHT);
   }
