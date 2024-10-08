@@ -4,13 +4,13 @@ import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.j
 export default class Snake {
   constructor(name, { x, y }, { up, down, left, right }, color) {
     this.geometry = new RoundedBoxGeometry(1, 1, 1, 7, 0.2);
-    this.material = new THREE.MeshStandardMaterial({
+    const material = new THREE.MeshStandardMaterial({
       color,
       roughness: 0.1,
       metalness: 0.9,
     });
 
-    const head = new THREE.Mesh(this.geometry, this.material);
+    const head = new THREE.Mesh(this.geometry, material);
     head.position.x = x;
     head.position.y = y;
     head.castShadow = true;
@@ -45,7 +45,15 @@ export default class Snake {
     this.newSegments && this.addSegments();
     for (let i = this.body.length - 2; i >= 0; i--) {
       this.body[i + 1].position.x = this.body[i].position.x;
-      this.body[i + 1].position.y = this.body[i].position.y;
+      this.body[i + 1].position.y = this.body[i].position.y; 
+
+      const alfa = 1 / ((i + 1) * 8);
+      const currentColor = this.body[i + 1].material.color;
+      const newColor = new THREE.Color(this.color);
+      if (!currentColor.equals(newColor)) {
+        const adjustedColor = currentColor.lerp(newColor, alfa);
+        this.body[i + 1].material.color = adjustedColor;
+      }
     }
     this.newSegments = 0;
     // After moving all the other segments, move the head:
@@ -55,8 +63,14 @@ export default class Snake {
   }
 
   addSegments() {
+    const material = new THREE.MeshStandardMaterial({
+      color: this.body[this.body.length - 1].material.color,
+      roughness: 0.1,
+      metalness: 0.9,
+    });
+
     for (let i = 0; i < this.newSegments; i++) {
-      const snakeSeg = new THREE.Mesh(this.geometry, this.material);
+      const snakeSeg = new THREE.Mesh(this.geometry, material);
       snakeSeg.position.x = this.body[this.body.length - 1].position.x;
       snakeSeg.position.y = this.body[this.body.length - 1].position.y;
       snakeSeg.castShadow = true;
@@ -82,6 +96,12 @@ export default class Snake {
   */
   expand(expansionRate) {
     this.newSegments += expansionRate;
+  }
+
+  changeColor(color) {
+    this.body[0].material.color.set(color);
+    this.pointLight.color.set(color);
+    this.color = color;
   }
 
   hitEdgeOfGrid(gridSize) {

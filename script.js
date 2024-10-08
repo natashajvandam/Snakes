@@ -55,7 +55,7 @@ function animate() {
     return;
   }
 
-	if (clock.getElapsedTime() > 0.09) {
+	if (clock.getElapsedTime() > 1 / GAME_SPEED) {
     game.update();
 		clock.start();
 	}

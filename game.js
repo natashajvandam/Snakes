@@ -74,6 +74,7 @@ export default class Game {
   checkIfSnakesAteFood() {
     this.snakes.forEach((snake) => {
       if (snake.equalPosition(snake.head(), this.food.foodMesh.position)) {
+        snake.changeColor(this.food.color);
         snake.expand(this.expansionRate);
         this.scoreBoard.update(snake);
         const { x, y } = this.grid.getRandomFoodPosition(
