@@ -14,7 +14,7 @@ export default class Grid {
   getRandomFoodPosition(occupiedSquares) {
     let newFoodPosition = this.randomGridPosition();
     while (
-      occupiedSquares.some((pos) => this.equalPosition(pos, newFoodPosition))
+      occupiedSquares.some((pos) => this.equalPosition(pos.position, newFoodPosition))
     ) {
       newFoodPosition = this.randomGridPosition();
     }
