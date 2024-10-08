@@ -1,20 +1,30 @@
 import { DEFAULT_SNAKES } from "./setup.js";
 import Game from "./game.js";
-import { GRID_SIZE, GAME_SPEED, EXPANSION_RATE, SNAKE_COUNT } from "./constants.js";
+import {
+  GRID_SIZE,
+  GAME_SPEED,
+  EXPANSION_RATE,
+  SNAKE_COUNT,
+} from "./constants.js";
 import { RANDOM_COLOR } from "./utils.js";
 import * as THREE from "three";
 
 let game;
 const renderer = new THREE.WebGLRenderer();
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera(
+  35,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
 let clock = new THREE.Clock(true);
 
 // This function uses the constants to create a game:
 function createGame() {
-  renderer.setSize( window.innerWidth, window.innerHeight );
+  renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
-  document.body.appendChild( renderer.domElement );
+  document.body.appendChild(renderer.domElement);
 
   camera.position.z = 50;
   const directionalLight = new THREE.PointLight(0xffffff, 1, 500, 0.01);
@@ -24,21 +34,21 @@ function createGame() {
   scene.add(directionalLight);
 
   game = new Game(scene, renderer, GRID_SIZE, GAME_SPEED, EXPANSION_RATE);
-  
+
   // Add each snake to the game:
   for (let i = 0; i < SNAKE_COUNT; i++) {
     // get a random position for the snake to spawn:
-    const {x, y} = game.grid.randomGridPosition();
+    const { x, y } = game.grid.randomGridPosition();
     // get a random color for the snake:
     const color = RANDOM_COLOR();
     // get the default values for the snake's name, color, and controls:
-    const {up, down, left, right, name} = DEFAULT_SNAKES[i];
-    game.addSnake( name, { x, y }, { up, down, left, right }, color);
+    const { up, down, left, right, name } = DEFAULT_SNAKES[i];
+    game.addSnake(name, { x, y }, { up, down, left, right }, color);
   }
 
   // Trigger the start of the game
   game.start();
-  renderer.setAnimationLoop( animate );
+  renderer.setAnimationLoop(animate);
 }
 
 /* 
@@ -55,12 +65,12 @@ function animate() {
     return;
   }
 
-	if (clock.getElapsedTime() > 1 / GAME_SPEED) {
+  if (clock.getElapsedTime() > 1 / GAME_SPEED) {
     game.update();
-		clock.start();
-	}
+    clock.start();
+  }
   // this is how it loops - it calls itself over and over again:
-  renderer.render( scene, camera );
+  renderer.render(scene, camera);
 }
 
 createGame(); // This is the first thing that runs when the page loads

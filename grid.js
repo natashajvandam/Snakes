@@ -38,7 +38,11 @@ export default class Grid {
   draw(scene) {
     // background
     const backgroundPlane = new THREE.PlaneGeometry(this.size, this.size);
-    const backgroundMaterial = new THREE.MeshStandardMaterial({ color: RANDOM_COLOR(), roughness: 0.8, metalness: 0.9 });
+    const backgroundMaterial = new THREE.MeshStandardMaterial({
+      color: RANDOM_COLOR(),
+      roughness: 0.8,
+      metalness: 0.9,
+    });
     const background = new THREE.Mesh(backgroundPlane, backgroundMaterial);
     background.position.z = -2;
     background.receiveShadow = true;
@@ -46,7 +50,11 @@ export default class Grid {
 
     // see-through grid
     const gridPlane = new THREE.PlaneGeometry(this.size, this.size);
-    const gridMaterial = new THREE.MeshPhysicalMaterial({ color: "white", transparent: true, opacity: 0.2 });
+    const gridMaterial = new THREE.MeshPhysicalMaterial({
+      color: "white",
+      transparent: true,
+      opacity: 0.2,
+    });
     const grid = new THREE.Mesh(gridPlane, gridMaterial);
     grid.position.z = -0.5;
     grid.receiveShadow = false;
@@ -54,7 +62,11 @@ export default class Grid {
 
     // walls
     const borderGeometry = new THREE.BoxGeometry(this.size, 1, 35);
-    const material = new THREE.MeshStandardMaterial({ color: RANDOM_COLOR(), roughness: 0.9, metalness: 0.9 });
+    const material = new THREE.MeshStandardMaterial({
+      color: RANDOM_COLOR(),
+      roughness: 0.9,
+      metalness: 0.9,
+    });
 
     // top boundary
     const borderUP = new THREE.Mesh(borderGeometry, material);

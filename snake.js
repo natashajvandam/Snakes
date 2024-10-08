@@ -45,7 +45,7 @@ export default class Snake {
     this.newSegments && this.addSegments();
     for (let i = this.body.length - 2; i >= 0; i--) {
       this.body[i + 1].position.x = this.body[i].position.x;
-      this.body[i + 1].position.y = this.body[i].position.y; 
+      this.body[i + 1].position.y = this.body[i].position.y;
 
       const alfa = 1 / ((i + 1) * 8);
       const currentColor = this.body[i + 1].material.color;

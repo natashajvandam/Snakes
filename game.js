@@ -7,8 +7,8 @@ import { RANDOM_COLOR } from "./utils.js";
 export default class Game {
   constructor(scene, renderer, gridSize, speed, expansionRate) {
     this.grid = new Grid(gridSize);
-    
-    const {x, y} = this.grid.randomGridPosition();
+
+    const { x, y } = this.grid.randomGridPosition();
     this.food = new Food(x, y, RANDOM_COLOR());
 
     this.snakes = [];
@@ -47,7 +47,9 @@ export default class Game {
   // checkForDeaths & checkIfSnakesAteFood are helper functions for update:
   checkForDeaths() {
     this.snakes.forEach((snake) => {
-      const otherSnakes = this.snakes.filter((s) => s.name !== snake.name && s.isAlive);
+      const otherSnakes = this.snakes.filter(
+        (s) => s.name !== snake.name && s.isAlive
+      );
 
       // check if snake is dead
       if (
