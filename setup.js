@@ -28,4 +28,11 @@ export const DEFAULT_SNAKES = [
     left: "f",
     right: "h",
   },
+  {
+    name: "Judgemental Shoelace",
+    up: "y",
+    down: "h",
+    left: "g",
+    right: "j",
+  },
 ];
