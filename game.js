@@ -5,7 +5,7 @@ import ScoreBoard from "./scoreBoard.js";
 import { RANDOM_COLOR } from "./utils.js";
 
 export default class Game {
-  constructor(scene, renderer, gridSize, speed, expansionRate) {
+  constructor(scene, gridSize, speed, expansionRate) {
     this.grid = new Grid(gridSize);
 
     const { x, y } = this.grid.randomGridPosition();
@@ -15,9 +15,7 @@ export default class Game {
     this.gameGoing = true;
     this.expansionRate = expansionRate;
     this.gameSpeed = speed;
-    this.lastRenderTime = 0;
     this.scoreBoard = new ScoreBoard();
-    this.renderer = renderer;
     this.scene = scene;
   }
 

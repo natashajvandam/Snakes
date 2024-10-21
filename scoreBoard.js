@@ -25,4 +25,10 @@ export default class ScoreBoard {
       `${snake.name}_score`
     ).style.color = snake.color;
   }
+
+  // This function is called when the game is over:
+  gameOver() {
+    const scores = document.getElementsByClassName("scores");
+    return Array.prototype.map.call(scores, (score) => score.innerHTML);
+  }
 }

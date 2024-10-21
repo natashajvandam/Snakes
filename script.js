@@ -33,7 +33,7 @@ function createGame() {
   directionalLight.position.x = 20;
   scene.add(directionalLight);
 
-  game = new Game(scene, renderer, GRID_SIZE, GAME_SPEED, EXPANSION_RATE);
+  game = new Game(scene, GRID_SIZE, GAME_SPEED, EXPANSION_RATE);
 
   // Add each snake to the game:
   for (let i = 0; i < SNAKE_COUNT; i++) {
@@ -58,19 +58,19 @@ function createGame() {
 */
 function animate() {
   // If game is no longer going - prompt user to play again:
-  if (game.gameGoing === false) {
-    if (confirm('Press "ok" to play again.')) {
-      window.location = "/"; // reloads the page (calls the createGame function again)
-    }
+  if (!game.gameGoing) {
+    const results = game.scoreBoard.gameOver();
+    renderer.setAnimationLoop(null);
+    alert(`${results.join(' \n')}`)
+    window.location = "/";
     return;
   }
 
-  if (clock.getElapsedTime() > 1 / GAME_SPEED) {
+  if ((clock.getElapsedTime() > 1 / game.gameSpeed)) {
     game.update();
     clock.start();
+    renderer.render(scene, camera);
   }
-  // this is how it loops - it calls itself over and over again:
-  renderer.render(scene, camera);
 }
 
 createGame(); // This is the first thing that runs when the page loads
